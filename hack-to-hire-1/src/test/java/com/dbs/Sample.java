@@ -1,5 +1,7 @@
 package com.dbs;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -61,24 +63,30 @@ public class Sample {
 	// REad data from database
 	@Test
 	public void getDataFromDb() throws SQLException {
-		Connection conn = ds.getConnection();
+		Connection conn = ds.getConnection();	
 		ResultSet rs = conn.prepareStatement("select * from Test").executeQuery();
 
 		while (rs.next()) {
-			System.out.println("Id: " + rs.getString(1) + ", data: " + rs.getString(2));
-		}
-		System.out.println();
+			System.out.println("Id: " + rs.getString(1) + ", data: " + rs.getString(2));		
+		
+		assertNotNull(rs.getString(2));
+        //assertEquals(rs.getString(2),"ABC1550903322446");
+        System.out.println("Successfully passed!");
+        //assert rs.getString(2)=="123":" Not valid";
+	  }
 	}
-
 	// insert data into database
 	@Test
 	public void insertDataIntoDb() throws SQLException {
-		Connection conn = ds.getConnection();
-
-		PreparedStatement stmt = conn.prepareStatement("insert into Test values(?,?)");
+		Connection conn = ds.getConnection(); 
+		String DOB =new String("01021988");
+		String Name =new String("Shaila");
+		
+		PreparedStatement stmt = conn.prepareStatement("insert into Test values(?,?,?)");
 		stmt.setString(1, String.valueOf(new Date().getTime()));// 1 specifies the first parameter in the query
-		stmt.setString(2, "ABC" + new Date().getTime());
-
+		stmt.setString(2, Name );
+		stmt.setString(3, DOB );
+		
 		int i = stmt.executeUpdate();
 		System.out.println(i + " records inserted");
 	}
@@ -102,8 +110,9 @@ public class Sample {
 		Connection conn = ds.getConnection();
 
 		PreparedStatement stmt = conn.prepareStatement("delete from Test where id=?");
-		stmt.setString(1, "1");// 1 specifies the first parameter in the query
-
+		stmt.setString(1, "1550858533440");// 1 specifies the first parameter in the query
+		stmt.setString(1, "1550880324584");
+		
 		int i = stmt.executeUpdate();
 		System.out.println(i + " records deleted");
 	}
